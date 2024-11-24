@@ -27,69 +27,70 @@ Let's dive in.
 
 <h2>Overview</h2>
 
-  - Step 1: Log into the Domain Controller (dc-1)
-  - Step 2: Pick a Random User Account
-  - Step 3: Simulate Failed Login Attempts
-  - Step 4: Configure Group Policy to Lock Out Accounts
-  - Step 5: Test the Lockout Policy
-  - Step 6: Observe the Account Lockout in Active Directory
-  - Step 7: Unlock the Account
-  - Step 8: Reset the Password
-  - Step 9: Test the Login
-  - Step 10: Disable the Account
-  - Step 11: Re-enable the Account
-  - Step 12: Observe Logs on the Domain Controller
-  - Step 13: Observe Logs on the Client Machine
+  - Part I: Configuring Active Directory Group Policy 
+    - Step 1: Open Group Policy Management Console (GPMC) 
+    - Step 2: Create/Edit Group Policy Object (GPO)
+    - Step 3: Navigate to the Account Lockout Policy Settings 
+    - Step 4: Configure Account Lockout Policy Settings 
+  - Part II: Dealing with Account Lockouts 
+    - Step 1: Log into the Domain Controller (dc-1)
+    - Step 2: Pick a Random User Account
+    - Step 3: Simulate Failed Login Attempts
+    - Step 4: Configure Group Policy to Lock Out Accounts
+    - Step 5: Test the Lockout Policy
+    - Step 6: Observe the Account Lockout in Active Directory
+    - Step 7: Unlock the Account
+    - Step 8: Reset the Password
+    - Step 9: Test the Login
+    - Step 10: Disable the Account
+    - Step 11: Re-enable the Account
+    - Step 12: Observe Logs on the Domain Controller
+    - Step 13: Observe Logs on the Client Machine
 
-<h2>Installation Steps</h2>
+<h2>Steps</h2>
+<h3>Part I: Configuring Active Directory Group Policy</h3>
 
-<h4>Step 1: Log into the Domain Controller (dc-1)</h4>
+<h4>Step 1: Open Group Policy Management Console (GPMC) </h4>
 
-<img src="https://i.imgur.com/nTMpYVh.png" height="80%" width="80%" alt=""/>
+<img src="https://i.imgur.com/6EhRwko.png" height="80%" width="80%" alt=""/>
 
-- Open a Remote Desktop Connection (RDP) session or physically access the Domain Controller (dc-1).
-- Use domain admin credentials to log in.
+- Open Group Policy Management Console (GPMC):
+  - Log in to a domain controller with administrative privileges.
+  - Press Win + R, type gpmc.msc, and hit Enter.
 
-<h4>Step 2: Pick a Random User Account</h4>
+<h4>Step 2: Create or Edit a Group Policy Object (GPO):</h4>
 
-<img src="https://i.imgur.com/dc07sEq.png" height="80%" width="80%" alt=""/>
+<img src="https://i.imgur.com/TqDhhN8.png" height="80%" width="80%" alt=""/>
 
-- Open Active Directory Users and Computers (ADUC):
-  - Navigate to Start > Administrative Tools > Active Directory Users and Computers.
-  - Select a previously created user account. For example: johndoe.
+- Navigate to your domain in the GPMC.
+- Right-click on the domain or an Organizational Unit (OU) where you want to apply the policy and select Create a GPO in this domain, and Link it here... or edit an existing GPO.
 
-<h4>Step 3: Simulate Failed Login Attempts</h4>
 
-<img src="https://i.imgur.com/HfQeAYK.png" height="80%" width="80%" alt=""/>
+<h4>Step 3: Navigate to the Account Lockout Policy Settings </h4>
 
-- On a client machine or in a testing environment, attempt to log in using the selected user account.
-- Enter an incorrect password 10 times.
-- Observe that the account is not locked out yet because the lockout policy hasn’t been configured.
+<img src="https://i.imgur.com/EDn6w7S.png" height="80%" width="80%" alt=""/>
 
-<h4>Step 4: Configure Group Policy to Lock Out Accounts</h4>
+- Computer Configuration -> Policies -> Windows Settings -> Security Settings -> Account Policies -> Account Lockout Policy
 
-<img src="https://i.imgur.com/HfQeAYK.png" height="80%" width="80%" alt=""/>
+<h4>Step 4: Configure Account Lockout Policy Settings </h4>
 
-- Open the Group Policy Management Console (GPMC) on the Domain Controller.
-- Start > Administrative Tools > Group Policy Management.
-- Navigate to the Default Domain Policy:
-- Expand your domain > Right-click Default Domain Policy > Click Edit.
-- Set the lockout policy:
-  - Go to Computer Configuration > Policies > Windows Settings > Security Settings > Account Policies > Account Lockout Policy.
+<img src="https://i.imgur.com/Jkx5zKj.png" height="80%" width="80%" alt=""/>
+
 - Configure the following settings:
   - Account lockout threshold: Set to 5 invalid login attempts.
   - Account lockout duration: Set to 30 minutes (or your preference).
-  - Reset account lockout counter after: Set to 30 minutes.
+  - Reset account lockout counter after: Set to 10 minutes.
   - Save and close the GPO editor.
 - Force the policy update:
   - Run gpupdate /force on the Domain Controller and the client machine.
  
-<h4>Step 5: Test the Lockout Policy</h4>
+<h4>Step 5: Force Update Group Policy</h4>
 
-<img src="https://i.imgur.com/HfQeAYK.png" height="80%" width="80%" alt=""/>
+<img src="https://i.imgur.com/1i90Xk4.png" height="80%" width="80%" alt=""/>
 
-- On a client machine, attempt to log in with the user account (johndoe) using a bad password 6 times.
-- Observe the account lockout error message after the 6th attempt.
+- You can wait ~90 minutes for the group policy to update itself or manually force the group policy to update.
+  - Login to Client-1 as an admin
+  - Open Command Prompt and type 'gpudate /force'
 
 <h4>Step 6: Observe the Ticket Lockout in Active Directory</h4>
 
