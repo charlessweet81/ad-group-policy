@@ -31,21 +31,14 @@ Let's dive in.
     - Step 1: Open Group Policy Management Console (GPMC) 
     - Step 2: Create/Edit Group Policy Object (GPO)
     - Step 3: Navigate to the Account Lockout Policy Settings 
-    - Step 4: Configure Account Lockout Policy Settings 
-  - Part II: Dealing with Account Lockouts 
-    - Step 1: Log into the Domain Controller (dc-1)
-    - Step 2: Pick a Random User Account
-    - Step 3: Simulate Failed Login Attempts
-    - Step 4: Configure Group Policy to Lock Out Accounts
-    - Step 5: Test the Lockout Policy
-    - Step 6: Observe the Account Lockout in Active Directory
+    - Step 4: Configure Account Lockout Policy Settings
+    - Step 5: Force Update Group Policy
+    - Step 6: Observe Lockout via Remote Desktop
     - Step 7: Unlock the Account
     - Step 8: Reset the Password
-    - Step 9: Test the Login
-    - Step 10: Disable the Account
-    - Step 11: Re-enable the Account
-    - Step 12: Observe Logs on the Domain Controller
-    - Step 13: Observe Logs on the Client Machine
+  - Part II: Disabling & Re-enabling Accounts
+    - Step 1: Step 1: Disable the Account
+    - Step 2: Re-enable the Account
 
 <h2>Steps</h2>
 <h3>Part I: Configuring Active Directory Group Policy</h3>
@@ -91,10 +84,15 @@ Let's dive in.
 - You can wait ~90 minutes for the group policy to update itself or manually force the group policy to update.
   - Login to Client-1 as an admin
   - Open Command Prompt and type 'gpudate /force'
+ 
+<h4> Step 6: Observe Lockout via Remote Desktop</h4>
+<img src="https://i.imgur.com/WNhQXTJ.png" height="80%" width="80%" alt=""/>
+
+- Try logging in with an incorrect password enough times to trigger lockout
 
 <h4>Step 6: Observe the Ticket Lockout in Active Directory</h4>
 
-<img src="https://i.imgur.com/HfQeAYK.png" height="80%" width="80%" alt=""/>
+<img src="https://i.imgur.com/WNhQXTJ.png" height="80%" width="80%" alt=""/>
 
 - In ADUC, navigate to the locked account:
 - Locate the user (e.g., johndoe) > Double-click the account.
@@ -111,23 +109,16 @@ Let's dive in.
  
 <h4>Step 8: Reset the Password</h4>
 
-<img src="https://i.imgur.com/HfQeAYK.png" height="80%" width="80%" alt=""/>
+<img src="https://i.imgur.com/Z8WZjHH.png" height="80%" width="80%" alt=""/>
 
 - Reset the user’s password:
 - Right-click the user in ADUC > Click Reset Password.
 - Enter a new password and click OK.
 
-<h4>Step 9: Test the Login</h4>
+<h3> Part II: Enabling & Disabling Accounts </h3>
+<h4>Step 1: Disable the Account</h4>
 
-<img src="https://i.imgur.com/HfQeAYK.png" height="80%" width="80%" alt=""/>
-
-- Reset the user’s password:
-- Right-click the user in ADUC > Click Reset Password.
-- Enter a new password and click OK.
-
-<h4>Step 10: Disable the Account</h4>
-
-<img src="https://i.imgur.com/HfQeAYK.png" height="80%" width="80%" alt=""/>
+<img src="https://i.imgur.com/F3DQ7yv.png" height="80%" width="80%" alt=""/>
 
 - In ADUC, disable the account:
   - Right-click the user > Click Disable Account.
@@ -135,33 +126,11 @@ Let's dive in.
   - Attempt to log in with the disabled account on a client machine.
   - Observe the error message: "Your account has been disabled. Please contact your administrator."
 
-<h4>Step 11: Re-enable the Account</h4>
+<h4>Step 2: Re-enable the Account</h4>
 
-<img src="https://i.imgur.com/HfQeAYK.png" height="80%" width="80%" alt=""/>
+<img src="https://i.imgur.com/fhNbn9G.png" height="80%" width="80%" alt=""/>
 
 - In ADUC, re-enable the account:
   - Right-click the user > Click Enable Account.
 - Test login:
   - Log in with the account to confirm it works.
-
-<h4>Step 12: Observe Logs on the Domain Controller</h4>
-
-<img src="https://i.imgur.com/HfQeAYK.png" height="80%" width="80%" alt=""/>
-
-- Open Event Viewer on the Domain Controller:
-  - Start > Administrative Tools > Event Viewer.
-- Navigate to Windows Logs > Security.
-- Look for events related to:
-  - Failed logins: Event ID 4625.
-  - Account lockout: Event ID 4740.
-  - Password changes: Event ID 4723 or 4724.
-
-<h4>Step 13: Observe Logs on the Client Machine</h4>
-
-<img src="https://i.imgur.com/HfQeAYK.png" height="80%" width="80%" alt=""/>
-
-- On the client machine, open Event Viewer:
-- Navigate to Windows Logs > Security.
-- Look for similar events (e.g., failed logins) tied to the test user account.
-
-Step 13: Observe Logs on the Client Machine
